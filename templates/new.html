@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Incident — FreshBasket</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           background: #f0f2f5; color: #1a1a2e; }
+    header { background: #1a1a2e; color: #fff; padding: 1rem 2rem;
+             display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 1.4rem; letter-spacing: .5px; }
+    header a  { color: #ccc; text-decoration: none; font-size: .9rem; }
+    header a:hover { color: #fff; }
+    main { max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+    .form-card { background: #fff; border-radius: 10px; padding: 2rem;
+                 box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+    h2 { font-size: 1.2rem; margin-bottom: 1.5rem; color: #1a1a2e; }
+    .field { margin-bottom: 1.2rem; }
+    label { display: block; font-size: .85rem; font-weight: 600;
+            margin-bottom: .4rem; color: #444; }
+    input[type="text"],
+    select,
+    textarea { width: 100%; padding: .65rem .8rem; border: 1px solid #dee2e6;
+               border-radius: 6px; font-size: .95rem; color: #1a1a2e;
+               transition: border-color .15s; }
+    input[type="text"]:focus,
+    select:focus,
+    textarea:focus { outline: none; border-color: #1a1a2e; }
+    textarea { resize: vertical; min-height: 100px; }
+    .actions { display: flex; gap: .8rem; margin-top: 1.5rem; }
+    .btn-submit { background: #e63946; color: #fff; border: none;
+                  padding: .7rem 1.8rem; border-radius: 6px; font-size: .95rem;
+                  cursor: pointer; font-weight: 600; }
+    .btn-submit:hover { background: #c1121f; }
+    .btn-cancel { background: transparent; color: #666; border: 1px solid #dee2e6;
+                  padding: .7rem 1.4rem; border-radius: 6px; font-size: .95rem;
+                  cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn-cancel:hover { background: #f8f9fa; }
+
+    /* severity colour hints in the select */
+    .hint { font-size: .78rem; color: #888; margin-top: .3rem; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🛒 FreshBasket Incident Dashboard</h1>
+  <a href="/">← Back to Dashboard</a>
+</header>
+<main>
+  <div class="form-card">
+    <h2>Report a New Incident</h2>
+    <form method="POST" action="/incidents">
+
+      <div class="field">
+        <label for="title">Title <span style="color:#e63946">*</span></label>
+        <input type="text" id="title" name="title"
+               placeholder="e.g. Checkout service returning 500s" required maxlength="255">
+      </div>
+
+      <div class="field">
+        <label for="severity">Severity</label>
+        <select id="severity" name="severity">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+          <option value="critical">Critical</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description" name="description"
+                  placeholder="Describe the issue, impact, and any steps already taken…"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="status">Initial Status</label>
+        <select id="status" name="status">
+          <option value="open" selected>Open</option>
+          <option value="in_progress">In Progress</option>
+          <option value="resolved">Resolved</option>
+        </select>
+      </div>
+
+      <div class="actions">
+        <button class="btn-submit" type="submit">Create Incident</button>
+        <a class="btn-cancel" href="/">Cancel</a>
+      </div>
+    </form>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreshBasket Incident Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           background: #f0f2f5; color: #1a1a2e; }
+    header { background: #1a1a2e; color: #fff; padding: 1rem 2rem;
+             display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 1.4rem; letter-spacing: .5px; }
+    header a  { background: #e63946; color: #fff; text-decoration: none;
+                padding: .5rem 1.2rem; border-radius: 6px; font-size: .9rem; }
+    header a:hover { background: #c1121f; }
+    main { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+
+    /* summary cards */
+    .summary { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .card { background: #fff; border-radius: 10px; padding: 1rem 1.5rem;
+            flex: 1; min-width: 130px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+    .card .label { font-size: .75rem; color: #666; text-transform: uppercase;
+                   letter-spacing: .5px; }
+    .card .value { font-size: 2rem; font-weight: 700; margin-top: .2rem; }
+
+    /* table */
+    table { width: 100%; border-collapse: collapse; background: #fff;
+            border-radius: 10px; overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+    thead { background: #1a1a2e; color: #fff; }
+    th, td { padding: .85rem 1rem; text-align: left; font-size: .88rem; }
+    tr:not(:last-child) td { border-bottom: 1px solid #f0f2f5; }
+    tbody tr:hover { background: #f8f9fa; }
+
+    /* severity badges */
+    .sev { display: inline-block; padding: .2rem .6rem; border-radius: 20px;
+           font-size: .75rem; font-weight: 600; text-transform: uppercase; }
+    .sev-low      { background: #d4edda; color: #155724; }
+    .sev-medium   { background: #fff3cd; color: #856404; }
+    .sev-high     { background: #ffe0b2; color: #bf360c; }
+    .sev-critical { background: #f8d7da; color: #721c24; }
+
+    /* status badges */
+    .st { display: inline-block; padding: .2rem .6rem; border-radius: 20px;
+          font-size: .75rem; font-weight: 600; text-transform: uppercase; }
+    .st-open        { background: #cfe2ff; color: #084298; }
+    .st-in_progress { background: #fff3cd; color: #856404; }
+    .st-resolved    { background: #d4edda; color: #155724; }
+
+    /* status update inline form */
+    .status-form { display: flex; gap: .4rem; align-items: center; }
+    .status-form select { padding: .3rem .5rem; border: 1px solid #dee2e6;
+                          border-radius: 5px; font-size: .82rem; }
+    .status-form button { padding: .3rem .8rem; background: #1a1a2e; color: #fff;
+                          border: none; border-radius: 5px; cursor: pointer;
+                          font-size: .82rem; }
+    .status-form button:hover { background: #e63946; }
+
+    .empty { text-align: center; padding: 3rem; color: #888; }
+    .empty a { color: #e63946; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🛒 FreshBasket Incident Dashboard</h1>
+  <a href="/new">+ New Incident</a>
+</header>
+<main>
+  <div class="summary">
+    <div class="card">
+      <div class="label">Total</div>
+      <div class="value">{{.Total}}</div>
+    </div>
+    <div class="card">
+      <div class="label">Open</div>
+      <div class="value" style="color:#084298">{{.Open}}</div>
+    </div>
+    <div class="card">
+      <div class="label">In Progress</div>
+      <div class="value" style="color:#856404">{{.InProgress}}</div>
+    </div>
+    <div class="card">
+      <div class="label">Resolved</div>
+      <div class="value" style="color:#155724">{{.Resolved}}</div>
+    </div>
+  </div>
+
+  {{if .Incidents}}
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Severity</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Created</th>
+        <th>Update Status</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{range .Incidents}}
+      <tr>
+        <td>{{.ID}}</td>
+        <td><strong>{{.Title}}</strong></td>
+        <td><span class="sev sev-{{.Severity}}">{{.Severity}}</span></td>
+        <td>{{.Description}}</td>
+        <td><span class="st st-{{.Status}}">{{.Status}}</span></td>
+        <td>{{.CreatedAt}}</td>
+        <td>
+          <form class="status-form" method="POST" action="/incidents/{{.ID}}/status">
+            <select name="status">
+              <option value="open"        {{if eq .Status "open"}}selected{{end}}>Open</option>
+              <option value="in_progress" {{if eq .Status "in_progress"}}selected{{end}}>In Progress</option>
+              <option value="resolved"    {{if eq .Status "resolved"}}selected{{end}}>Resolved</option>
+            </select>
+            <button type="submit">Save</button>
+          </form>
+        </td>
+      </tr>
+    {{end}}
+    </tbody>
+  </table>
+  {{else}}
+  <div class="empty">
+    No incidents yet. <a href="/new">Create the first one →</a>
+  </div>
+  {{end}}
+</main>
+</body>
+</html>
