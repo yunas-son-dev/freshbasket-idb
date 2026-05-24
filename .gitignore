@@ -3,3 +3,13 @@
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# SSH Keys — never commit private keys
+*.pem
+
+# Build artifacts
+*.zip
+freshbasket-idb
+
+# Assignment documents — not needed in repo
+*.docx
