@@ -59,7 +59,16 @@
 
     .empty { text-align: center; padding: 3rem; color: #888; }
     .empty a { color: #e63946; }
+
+    /* charts section */
+    .charts { display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .chart-card { background: #fff; border-radius: 10px; padding: 1.5rem;
+                  box-shadow: 0 1px 4px rgba(0,0,0,.08); flex: 1; min-width: 280px; }
+    .chart-card h3 { font-size: .9rem; color: #666; text-transform: uppercase;
+                     letter-spacing: .5px; margin-bottom: 1rem; }
+    .chart-wrap { position: relative; height: 220px; }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
 <body>
 <header>
@@ -126,6 +135,70 @@
   <div class="empty">
     No incidents yet. <a href="/new">Create the first one →</a>
   </div>
+  {{end}}
+  {{if .Incidents}}
+  <div class="charts">
+    <div class="chart-card">
+      <h3>Incidents by Status</h3>
+      <div class="chart-wrap">
+        <canvas id="statusChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Incidents by Severity</h3>
+      <div class="chart-wrap">
+        <canvas id="severityChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const statusCtx = document.getElementById('statusChart').getContext('2d');
+      new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Open', 'In Progress', 'Resolved'],
+          datasets: [{
+            data: [{{.Open}}, {{.InProgress}}, {{.Resolved}}],
+            backgroundColor: ['#cfe2ff', '#fff3cd', '#d4edda'],
+            borderColor:     ['#084298', '#856404', '#155724'],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 12 } } }
+          }
+        }
+      });
+
+      const sevCtx = document.getElementById('severityChart').getContext('2d');
+      new Chart(sevCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Critical', 'High', 'Medium', 'Low'],
+          datasets: [{
+            label: 'Incidents',
+            data: [{{.SevCritical}}, {{.SevHigh}}, {{.SevMedium}}, {{.SevLow}}],
+            backgroundColor: ['#f8d7da', '#ffe0b2', '#fff3cd', '#d4edda'],
+            borderColor:     ['#721c24', '#bf360c', '#856404', '#155724'],
+            borderWidth: 2,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f0f2f5' } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    })();
+  </script>
   {{end}}
 </main>
 </body>

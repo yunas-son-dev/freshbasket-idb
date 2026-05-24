@@ -25,11 +25,15 @@ type Incident struct {
 }
 
 type DashboardData struct {
-	Incidents  []Incident
-	Total      int
-	Open       int
-	InProgress int
-	Resolved   int
+	Incidents    []Incident
+	Total        int
+	Open         int
+	InProgress   int
+	Resolved     int
+	SevLow       int
+	SevMedium    int
+	SevHigh      int
+	SevCritical  int
 }
 
 func getEnv(key, fallback string) string {
@@ -128,6 +132,16 @@ func listIncidents(w http.ResponseWriter, r *http.Request) {
 			data.InProgress++
 		case "resolved":
 			data.Resolved++
+		}
+		switch inc.Severity {
+		case "low":
+			data.SevLow++
+		case "medium":
+			data.SevMedium++
+		case "high":
+			data.SevHigh++
+		case "critical":
+			data.SevCritical++
 		}
 	}
 
