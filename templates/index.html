@@ -16,24 +16,19 @@
     header a:hover { background: #c1121f; }
     main { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
 
-    /* summary cards */
     .summary { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .card { background: #fff; border-radius: 10px; padding: 1rem 1.5rem;
             flex: 1; min-width: 130px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
-    .card .label { font-size: .75rem; color: #666; text-transform: uppercase;
-                   letter-spacing: .5px; }
+    .card .label { font-size: .75rem; color: #666; text-transform: uppercase; letter-spacing: .5px; }
     .card .value { font-size: 2rem; font-weight: 700; margin-top: .2rem; }
 
-    /* table */
     table { width: 100%; border-collapse: collapse; background: #fff;
-            border-radius: 10px; overflow: hidden;
-            box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+            border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
     thead { background: #1a1a2e; color: #fff; }
     th, td { padding: .85rem 1rem; text-align: left; font-size: .88rem; }
     tr:not(:last-child) td { border-bottom: 1px solid #f0f2f5; }
     tbody tr:hover { background: #f8f9fa; }
 
-    /* severity badges */
     .sev { display: inline-block; padding: .2rem .6rem; border-radius: 20px;
            font-size: .75rem; font-weight: 600; text-transform: uppercase; }
     .sev-low      { background: #d4edda; color: #155724; }
@@ -41,43 +36,48 @@
     .sev-high     { background: #ffe0b2; color: #bf360c; }
     .sev-critical { background: #f8d7da; color: #721c24; }
 
-    /* status badges */
     .st { display: inline-block; padding: .2rem .6rem; border-radius: 20px;
           font-size: .75rem; font-weight: 600; text-transform: uppercase; }
     .st-open        { background: #cfe2ff; color: #084298; }
     .st-in_progress { background: #fff3cd; color: #856404; }
     .st-resolved    { background: #d4edda; color: #155724; }
 
-    /* status update inline form */
     .status-form { display: flex; gap: .4rem; align-items: center; }
     .status-form select { padding: .3rem .5rem; border: 1px solid #dee2e6;
                           border-radius: 5px; font-size: .82rem; }
     .status-form button { padding: .3rem .8rem; background: #1a1a2e; color: #fff;
-                          border: none; border-radius: 5px; cursor: pointer;
-                          font-size: .82rem; }
+                          border: none; border-radius: 5px; cursor: pointer; font-size: .82rem; }
     .status-form button:hover { background: #e63946; }
 
     .empty { text-align: center; padding: 3rem; color: #888; }
     .empty a { color: #e63946; }
 
     /* charts */
-    .charts { display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
-    .chart-card { background: #fff; border-radius: 10px; padding: 1.5rem;
-                  box-shadow: 0 1px 4px rgba(0,0,0,.08); flex: 1; min-width: 280px; }
-    .chart-card h3 { font-size: .75rem; color: #888; text-transform: uppercase;
-                     letter-spacing: .5px; margin-bottom: 1.2rem; }
-    .chart-inner { display: flex; align-items: center; gap: 1.5rem; }
-    canvas { display: block; }
-    .legend { display: flex; flex-direction: column; gap: .5rem; }
-    .legend-item { display: flex; align-items: center; gap: .5rem; font-size: .82rem; }
-    .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
-    .bar-chart-wrap { width: 100%; }
-    .bar-row { display: flex; align-items: center; gap: .7rem; margin-bottom: .7rem; }
-    .bar-label { font-size: .78rem; width: 60px; text-align: right; color: #555; flex-shrink: 0; }
-    .bar-track { flex: 1; background: #f0f2f5; border-radius: 6px; height: 22px; overflow: hidden; }
-    .bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center;
-                padding-left: .4rem; font-size: .75rem; font-weight: 600;
-                color: #333; min-width: 28px; transition: width .4s; }
+    .charts-section { margin-top: 1.5rem; }
+    .charts-section-title { font-size: .72rem; font-weight: 500; color: #888;
+                            text-transform: uppercase; letter-spacing: .08em; margin-bottom: .75rem; }
+    .charts-grid { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .chart-card { background: #fff; border-radius: 10px; padding: 1.25rem;
+                  box-shadow: 0 1px 4px rgba(0,0,0,.08); flex: 1; min-width: 260px; }
+    .chart-card-title { font-size: .72rem; font-weight: 500; color: #888;
+                        text-transform: uppercase; letter-spacing: .08em; margin-bottom: 1rem; }
+    .donut-wrap { display: flex; align-items: center; gap: 1.2rem; }
+    .donut-container { position: relative; width: 130px; height: 130px; flex-shrink: 0; }
+    .donut-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+                   text-align: center; pointer-events: none; }
+    .donut-num { font-size: 1.3rem; font-weight: 600; color: #1a1a2e; line-height: 1; }
+    .donut-sub { font-size: .7rem; color: #888; margin-top: 3px; }
+    .legend-block { flex: 1; }
+    .legend-row { display: flex; align-items: center; gap: 7px; font-size: .82rem;
+                  color: #555; margin-bottom: 7px; }
+    .legend-sq { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+    .legend-val { margin-left: auto; font-weight: 600; font-size: .82rem; color: #1a1a2e; }
+    .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+    .bar-lbl { font-size: .75rem; color: #666; width: 55px; text-align: right; flex-shrink: 0; }
+    .bar-track { flex: 1; background: #f0f2f5; border-radius: 4px; height: 20px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center;
+                justify-content: flex-end; padding-right: 6px; font-size: .7rem;
+                font-weight: 600; min-width: 22px; }
   </style>
 </head>
 <body>
@@ -109,13 +109,8 @@
   <table>
     <thead>
       <tr>
-        <th>#</th>
-        <th>Title</th>
-        <th>Severity</th>
-        <th>Description</th>
-        <th>Status</th>
-        <th>Created</th>
-        <th>Update Status</th>
+        <th>#</th><th>Title</th><th>Severity</th><th>Description</th>
+        <th>Status</th><th>Created</th><th>Update Status</th>
       </tr>
     </thead>
     <tbody>
@@ -142,84 +137,93 @@
     </tbody>
   </table>
 
-  <div class="charts">
-    <!-- Donut chart: by status -->
-    <div class="chart-card">
-      <h3>Incidents by Status</h3>
-      <div class="chart-inner">
-        <canvas id="donut" width="160" height="160"></canvas>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#4a90d9"></div>Open ({{.Open}})</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#f0a500"></div>In Progress ({{.InProgress}})</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#3cb371"></div>Resolved ({{.Resolved}})</div>
+  <div class="charts-section">
+    <div class="charts-section-title">Incident analytics</div>
+    <div class="charts-grid">
+
+      <div class="chart-card">
+        <div class="chart-card-title">Incidents by status</div>
+        <div class="donut-wrap">
+          <div class="donut-container">
+            <canvas id="donutCanvas" width="130" height="130"></canvas>
+            <div class="donut-label">
+              <div class="donut-num">{{.Total}}</div>
+              <div class="donut-sub">total</div>
+            </div>
+          </div>
+          <div class="legend-block">
+            <div class="legend-row"><span class="legend-sq" style="background:#378ADD"></span>Open<span class="legend-val">{{.Open}}</span></div>
+            <div class="legend-row"><span class="legend-sq" style="background:#EF9F27"></span>In Progress<span class="legend-val">{{.InProgress}}</span></div>
+            <div class="legend-row"><span class="legend-sq" style="background:#639922"></span>Resolved<span class="legend-val">{{.Resolved}}</span></div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Bar chart: by severity -->
-    <div class="chart-card">
-      <h3>Incidents by Severity</h3>
-      <div class="bar-chart-wrap" id="barChart"></div>
+      <div class="chart-card">
+        <div class="chart-card-title">Incidents by severity</div>
+        <div id="sevBars" style="margin-top:4px"></div>
+      </div>
+
     </div>
   </div>
+  {{else}}
+  <div class="empty">No incidents yet. <a href="/new">Create the first one →</a></div>
+  {{end}}
 
   <script>
-    (function(){
-      // Donut chart
-      var canvas = document.getElementById('donut');
-      if (canvas) {
-        var ctx = canvas.getContext('2d');
-        var data   = [{{.Open}}, {{.InProgress}}, {{.Resolved}}];
-        var colors = ['#4a90d9','#f0a500','#3cb371'];
-        var total  = data.reduce(function(a,b){ return a+b; }, 0);
-        if (total > 0) {
-          var cx=80, cy=80, ro=70, ri=38, start=-Math.PI/2;
-          data.forEach(function(val, i){
-            var slice = (val/total)*2*Math.PI;
-            ctx.beginPath();
-            ctx.moveTo(cx,cy);
-            ctx.arc(cx,cy,ro,start,start+slice);
-            ctx.closePath();
-            ctx.fillStyle = colors[i];
-            ctx.fill();
-            start += slice;
-          });
+  (function(){
+    var c = document.getElementById('donutCanvas');
+    if (c) {
+      var ctx = c.getContext('2d');
+      var data   = [{{.Open}}, {{.InProgress}}, {{.Resolved}}];
+      var colors = ['#378ADD','#EF9F27','#639922'];
+      var total  = {{.Total}};
+      var cx=65, cy=65, ro=58, ri=36, start=-Math.PI/2;
+      if (total > 0) {
+        data.forEach(function(v,i){
+          if (v === 0) return;
+          var s = (v/total)*2*Math.PI;
           ctx.beginPath();
-          ctx.arc(cx,cy,ri,0,2*Math.PI);
-          ctx.fillStyle='#fff';
+          ctx.arc(cx,cy,ro,start,start+s);
+          ctx.arc(cx,cy,ri,start+s,start,true);
+          ctx.closePath();
+          ctx.fillStyle = colors[i];
           ctx.fill();
-          ctx.fillStyle='#333';
-          ctx.font='bold 20px sans-serif';
-          ctx.textAlign='center';
-          ctx.textBaseline='middle';
-          ctx.fillText(total, cx, cy-6);
-          ctx.font='11px sans-serif';
-          ctx.fillStyle='#888';
-          ctx.fillText('total', cx, cy+12);
-        }
-      }
-
-      // Bar chart
-      var sevData = [
-        { label:'Critical', val:{{.SevCritical}}, color:'#f8a0aa' },
-        { label:'High',     val:{{.SevHigh}},     color:'#ffc078' },
-        { label:'Medium',   val:{{.SevMedium}},   color:'#ffe080' },
-        { label:'Low',      val:{{.SevLow}},       color:'#80d4a0' }
-      ];
-      var maxVal = Math.max.apply(null, sevData.map(function(d){ return d.val; })) || 1;
-      var wrap = document.getElementById('barChart');
-      if (wrap) {
-        sevData.forEach(function(d){
-          var pct = Math.round((d.val / maxVal) * 100);
-          wrap.innerHTML += '<div class="bar-row">' +
-            '<div class="bar-label">' + d.label + '</div>' +
-            '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + d.color + '">' + d.val + '</div></div>' +
-            '</div>';
+          start += s;
         });
+      } else {
+        ctx.beginPath();
+        ctx.arc(cx,cy,ro,0,2*Math.PI);
+        ctx.arc(cx,cy,ri,2*Math.PI,0,true);
+        ctx.closePath();
+        ctx.fillStyle = '#e9ecef';
+        ctx.fill();
       }
-    })();
+    }
+
+    var sevData = [
+      {label:'Critical', val:{{.SevCritical}}, bg:'#F09595', fg:'#721c24'},
+      {label:'High',     val:{{.SevHigh}},     bg:'#FAC775', fg:'#633806'},
+      {label:'Medium',   val:{{.SevMedium}},   bg:'#EF9F27', fg:'#412402'},
+      {label:'Low',      val:{{.SevLow}},       bg:'#97C459', fg:'#173404'}
+    ];
+    var maxVal = Math.max.apply(null, sevData.map(function(d){return d.val;})) || 1;
+    var wrap = document.getElementById('sevBars');
+    if (wrap) {
+      sevData.forEach(function(d){
+        var pct = Math.round((d.val/maxVal)*100);
+        var row = document.createElement('div');
+        row.className = 'bar-row';
+        row.innerHTML =
+          '<div class="bar-lbl">'+d.label+'</div>'+
+          '<div class="bar-track">'+
+            '<div class="bar-fill" style="width:'+pct+'%;background:'+d.bg+';color:'+d.fg+'">'+d.val+'</div>'+
+          '</div>';
+        wrap.appendChild(row);
+      });
+    }
+  })();
   </script>
-  {{end}}
 </main>
 </body>
 </html>
