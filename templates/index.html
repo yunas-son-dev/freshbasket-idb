@@ -145,7 +145,11 @@
         <div class="chart-card-title">Incidents by status</div>
         <div class="donut-wrap">
           <div class="donut-container">
-            <canvas id="donutCanvas" width="130" height="130"></canvas>
+            <canvas id="donutCanvas" width="130" height="130"
+              data-open="{{.Open}}"
+              data-inprogress="{{.InProgress}}"
+              data-resolved="{{.Resolved}}"
+              data-total="{{.Total}}"></canvas>
             <div class="donut-label">
               <div class="donut-num">{{.Total}}</div>
               <div class="donut-sub">total</div>
@@ -161,7 +165,11 @@
 
       <div class="chart-card">
         <div class="chart-card-title">Incidents by severity</div>
-        <div id="sevBars" style="margin-top:4px"></div>
+        <div id="sevBars" style="margin-top:4px"
+          data-critical="{{.SevCritical}}"
+          data-high="{{.SevHigh}}"
+          data-medium="{{.SevMedium}}"
+          data-low="{{.SevLow}}"></div>
       </div>
 
     </div>
@@ -174,10 +182,13 @@
   (function(){
     var c = document.getElementById('donutCanvas');
     if (c) {
+      var open  = parseInt(c.dataset.open, 10);
+      var inp   = parseInt(c.dataset.inprogress, 10);
+      var res   = parseInt(c.dataset.resolved, 10);
+      var total = parseInt(c.dataset.total, 10);
       var ctx = c.getContext('2d');
-      var data   = [{{.Open}}, {{.InProgress}}, {{.Resolved}}];
+      var data   = [open, inp, res];
       var colors = ['#378ADD','#EF9F27','#639922'];
-      var total  = {{.Total}};
       var cx=65, cy=65, ro=58, ri=36, start=-Math.PI/2;
       if (total > 0) {
         data.forEach(function(v,i){
@@ -201,15 +212,15 @@
       }
     }
 
-    var sevData = [
-      {label:'Critical', val:{{.SevCritical}}, bg:'#F09595', fg:'#721c24'},
-      {label:'High',     val:{{.SevHigh}},     bg:'#FAC775', fg:'#633806'},
-      {label:'Medium',   val:{{.SevMedium}},   bg:'#EF9F27', fg:'#412402'},
-      {label:'Low',      val:{{.SevLow}},       bg:'#97C459', fg:'#173404'}
-    ];
-    var maxVal = Math.max.apply(null, sevData.map(function(d){return d.val;})) || 1;
     var wrap = document.getElementById('sevBars');
     if (wrap) {
+      var sevData = [
+        {label:'Critical', val:parseInt(wrap.dataset.critical,10), bg:'#F09595', fg:'#721c24'},
+        {label:'High',     val:parseInt(wrap.dataset.high,10),     bg:'#FAC775', fg:'#633806'},
+        {label:'Medium',   val:parseInt(wrap.dataset.medium,10),   bg:'#EF9F27', fg:'#412402'},
+        {label:'Low',      val:parseInt(wrap.dataset.low,10),      bg:'#97C459', fg:'#173404'}
+      ];
+      var maxVal = Math.max.apply(null, sevData.map(function(d){return d.val;})) || 1;
       sevData.forEach(function(d){
         var pct = Math.round((d.val/maxVal)*100);
         var row = document.createElement('div');
