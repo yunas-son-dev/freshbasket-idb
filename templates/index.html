@@ -60,15 +60,25 @@
     .empty { text-align: center; padding: 3rem; color: #888; }
     .empty a { color: #e63946; }
 
-    /* charts section */
+    /* charts */
     .charts { display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
     .chart-card { background: #fff; border-radius: 10px; padding: 1.5rem;
                   box-shadow: 0 1px 4px rgba(0,0,0,.08); flex: 1; min-width: 280px; }
-    .chart-card h3 { font-size: .9rem; color: #666; text-transform: uppercase;
-                     letter-spacing: .5px; margin-bottom: 1rem; }
-    .chart-wrap { position: relative; height: 220px; }
+    .chart-card h3 { font-size: .75rem; color: #888; text-transform: uppercase;
+                     letter-spacing: .5px; margin-bottom: 1.2rem; }
+    .chart-inner { display: flex; align-items: center; gap: 1.5rem; }
+    canvas { display: block; }
+    .legend { display: flex; flex-direction: column; gap: .5rem; }
+    .legend-item { display: flex; align-items: center; gap: .5rem; font-size: .82rem; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .bar-chart-wrap { width: 100%; }
+    .bar-row { display: flex; align-items: center; gap: .7rem; margin-bottom: .7rem; }
+    .bar-label { font-size: .78rem; width: 60px; text-align: right; color: #555; flex-shrink: 0; }
+    .bar-track { flex: 1; background: #f0f2f5; border-radius: 6px; height: 22px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center;
+                padding-left: .4rem; font-size: .75rem; font-weight: 600;
+                color: #333; min-width: 28px; transition: width .4s; }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
 <body>
 <header>
@@ -131,72 +141,82 @@
     {{end}}
     </tbody>
   </table>
-  {{else}}
-  <div class="empty">
-    No incidents yet. <a href="/new">Create the first one →</a>
-  </div>
-  {{end}}
-  {{if .Incidents}}
+
   <div class="charts">
+    <!-- Donut chart: by status -->
     <div class="chart-card">
       <h3>Incidents by Status</h3>
-      <div class="chart-wrap">
-        <canvas id="statusChart"></canvas>
+      <div class="chart-inner">
+        <canvas id="donut" width="160" height="160"></canvas>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#4a90d9"></div>Open ({{.Open}})</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#f0a500"></div>In Progress ({{.InProgress}})</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#3cb371"></div>Resolved ({{.Resolved}})</div>
+        </div>
       </div>
     </div>
+
+    <!-- Bar chart: by severity -->
     <div class="chart-card">
       <h3>Incidents by Severity</h3>
-      <div class="chart-wrap">
-        <canvas id="severityChart"></canvas>
-      </div>
+      <div class="bar-chart-wrap" id="barChart"></div>
     </div>
   </div>
 
   <script>
-    (function() {
-      const statusCtx = document.getElementById('statusChart').getContext('2d');
-      new Chart(statusCtx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Open', 'In Progress', 'Resolved'],
-          datasets: [{
-            data: [{{.Open}}, {{.InProgress}}, {{.Resolved}}],
-            backgroundColor: ['#cfe2ff', '#fff3cd', '#d4edda'],
-            borderColor:     ['#084298', '#856404', '#155724'],
-            borderWidth: 2
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom', labels: { font: { size: 12 } } }
-          }
+    (function(){
+      // Donut chart
+      var canvas = document.getElementById('donut');
+      if (canvas) {
+        var ctx = canvas.getContext('2d');
+        var data   = [{{.Open}}, {{.InProgress}}, {{.Resolved}}];
+        var colors = ['#4a90d9','#f0a500','#3cb371'];
+        var total  = data.reduce(function(a,b){ return a+b; }, 0);
+        if (total > 0) {
+          var cx=80, cy=80, ro=70, ri=38, start=-Math.PI/2;
+          data.forEach(function(val, i){
+            var slice = (val/total)*2*Math.PI;
+            ctx.beginPath();
+            ctx.moveTo(cx,cy);
+            ctx.arc(cx,cy,ro,start,start+slice);
+            ctx.closePath();
+            ctx.fillStyle = colors[i];
+            ctx.fill();
+            start += slice;
+          });
+          ctx.beginPath();
+          ctx.arc(cx,cy,ri,0,2*Math.PI);
+          ctx.fillStyle='#fff';
+          ctx.fill();
+          ctx.fillStyle='#333';
+          ctx.font='bold 20px sans-serif';
+          ctx.textAlign='center';
+          ctx.textBaseline='middle';
+          ctx.fillText(total, cx, cy-6);
+          ctx.font='11px sans-serif';
+          ctx.fillStyle='#888';
+          ctx.fillText('total', cx, cy+12);
         }
-      });
+      }
 
-      const sevCtx = document.getElementById('severityChart').getContext('2d');
-      new Chart(sevCtx, {
-        type: 'bar',
-        data: {
-          labels: ['Critical', 'High', 'Medium', 'Low'],
-          datasets: [{
-            label: 'Incidents',
-            data: [{{.SevCritical}}, {{.SevHigh}}, {{.SevMedium}}, {{.SevLow}}],
-            backgroundColor: ['#f8d7da', '#ffe0b2', '#fff3cd', '#d4edda'],
-            borderColor:     ['#721c24', '#bf360c', '#856404', '#155724'],
-            borderWidth: 2,
-            borderRadius: 6
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f0f2f5' } },
-            x: { grid: { display: false } }
-          }
-        }
-      });
+      // Bar chart
+      var sevData = [
+        { label:'Critical', val:{{.SevCritical}}, color:'#f8a0aa' },
+        { label:'High',     val:{{.SevHigh}},     color:'#ffc078' },
+        { label:'Medium',   val:{{.SevMedium}},   color:'#ffe080' },
+        { label:'Low',      val:{{.SevLow}},       color:'#80d4a0' }
+      ];
+      var maxVal = Math.max.apply(null, sevData.map(function(d){ return d.val; })) || 1;
+      var wrap = document.getElementById('barChart');
+      if (wrap) {
+        sevData.forEach(function(d){
+          var pct = Math.round((d.val / maxVal) * 100);
+          wrap.innerHTML += '<div class="bar-row">' +
+            '<div class="bar-label">' + d.label + '</div>' +
+            '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + d.color + '">' + d.val + '</div></div>' +
+            '</div>';
+        });
+      }
     })();
   </script>
   {{end}}
