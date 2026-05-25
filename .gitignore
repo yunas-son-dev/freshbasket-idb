@@ -9,7 +9,6 @@
 
 # Build artifacts
 *.zip
-freshbasket-idb
 
 # Assignment documents — not needed in repo
 *.docx
