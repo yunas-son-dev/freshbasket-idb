@@ -18,7 +18,7 @@ Operations staff can log, view, and update service incidents through a lightweig
 | Load Balancer | Application Load Balancer (ALB) |
 | Scaling | Auto Scaling Group (min 2, max 8 instances) |
 | Notifications | Amazon SNS (email alerts) |
-| Monitoring | Amazon CloudWatch (CPU utilisation metrics) |
+| Monitoring | Amazon CloudWatch (CPU utilisation metrics + alarm) |
 
 ---
 
@@ -41,8 +41,11 @@ The Auto Scaling Group maintains a minimum of 2 EC2 instances at all times and s
 
 ### Operational Visibility
 
-- Amazon CloudWatch collects CPU utilisation metrics from all EC2 instances in the ASG. These metrics feed the scaling policies and can be used to create dashboards or alarms.
-- Amazon SNS is subscribed to the Elastic Beanstalk environment to deliver email notifications for deployment events, environment health changes, and Auto Scaling activity.
+- Amazon CloudWatch collects CPU utilisation metrics from all EC2 instances in the ASG. These metrics feed the ASG scaling policies.
+- A dedicated CloudWatch alarm (`freshbasket-cpu-high`) fires when average CPU exceeds **80% for 5 consecutive minutes**, triggering an SNS email notification directly — independent of Elastic Beanstalk events.
+- The alarm also sends an **OK notification** when CPU drops back below the threshold, completing a full monitoring-to-alert loop that mirrors real on-call setups.
+- The alarm is provisioned automatically via `.ebextensions/cloudwatch-alarm.config` using CloudFormation references (`AWSEBAutoScalingGroup`, `AWSEBSNSTopic`), so it is recreated on every environment rebuild without manual setup.
+- Amazon SNS is additionally subscribed to EB environment events for deployment, health change, and Auto Scaling notifications.
 
 ### Managed Cloud Deployment
 
@@ -62,7 +65,8 @@ freshbasket-idb/
 │   ├── index.html           # Dashboard view (incident list + charts)
 │   └── new.html             # New incident form
 ├── .ebextensions/
-│   └── db.config            # Elastic Beanstalk configuration notes
+│   ├── db.config            # Elastic Beanstalk configuration notes
+│   └── cloudwatch-alarm.config  # CloudWatch CPU alarm → SNS (auto-provisioned)
 └── .platform/
     └── hooks/predeploy/
         └── 01_chmod.sh      # Sets executable permission on the binary
